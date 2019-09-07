@@ -24,17 +24,20 @@ flat_train = data_train.reshape(30000, 28 * 28)
 flat_val = flat_train[20000:,]
 flat_partial_train = flat_train[:20000,]
 
+#create val labels
+label_val = label_train[20000:,]
+partial_label_train = label_train[: 20000,]
+
 #data matrix already contained between 0 and 1 no transformation needed
 np.min(flat_train)
 np.max(flat_train)
 
 #one hot encode y for softmax output 
-hot_train = np.zeros((label_train.size, label_train.max()+1))
-hot_train[np.arange(label_train.size), label_train] = 1
+def oneHot(y):
+    zeroesY = np.zeros((y.size, y.max() + 1))
+    zeroesY[np.arange(y.size), y] = 1
+    return zeroesY
 
-#create val labels
-hot_val = hot_train[20000:,]
-hot_partial_train = hot_train[:20000,]
 
 #create softmax function 
 def softmax(x):
@@ -47,7 +50,25 @@ def outputs(X):
     return probs, preds
 
 
+def getLoss(w,x,y,lam):
+    m = x.shape[0] #First we get the number of training examples
+    y_mat = oneHot(y) #Next we convert the integer class coding into a one-hot representation
+    scores = np.dot(x,w) #Then we compute raw class scores given our input and current weights
+    prob = softmax(scores) #Next we perform a softmax on these scores to get their probabilities
+    loss = (-1 / m) * np.sum(y_mat * np.log(prob)) + (lam/2)*np.sum(w*w) #We then find the loss of the probabilities
+    grad = (-1 / m) * np.dot(x.T,(y_mat - prob)) + lam*w #And compute the gradient for that loss
+    return loss,grad
     
 
+w = np.zeros([flat_partial_train.shape[1],len(np.unique(partial_label_train))])
+lam = 1
+iterations = 100
+learningRate = 1e-3
+losses = []
+for i in range(0,iterations):
+    loss,grad = getLoss(w,flat_partial_train, partial_label_train,lam)
+    losses.append(loss)
+    w = w - (learningRate * grad)
+print(loss)
 
-
+plt.plot(losses)
