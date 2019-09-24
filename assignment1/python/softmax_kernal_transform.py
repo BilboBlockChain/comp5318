@@ -3,11 +3,11 @@ import numpy as np
 import os
 import scipy as sp
 
-print(os.listdir("./data/train"))
+print(os.listdir("./assignment1/data/train"))
 
-with h5py.File('./data/train/images_training.h5','r') as H:
+with h5py.File('./assignment1/data/train/images_training.h5','r') as H:
     data_train = np.copy(H['datatrain'])
-with h5py.File('./data/train/labels_training.h5','r') as H:
+with h5py.File('./assignment1/data/train/labels_training.h5','r') as H:
     label_train = np.copy(H['labeltrain'])
 
 # using H['datatest'], H['labeltest'] for test dataset.
