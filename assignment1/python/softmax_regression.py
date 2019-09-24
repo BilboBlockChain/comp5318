@@ -66,8 +66,10 @@ oneHot(partial_label_train)
 np.unique(partial_label_train)
 
 #create softmax function 
-def softmax(x):
-    return np.exp(x)/ np.sum(np.exp(x), axis = 0)
+def softmax(Z): # Todo 
+    e_Z = np.exp(Z)
+    A = e_Z / e_Z.sum(axis = 1, keepdims = True)
+    return A
 
 #retrieve probabilites and arg max predictions
 def outputs(X):
@@ -88,7 +90,7 @@ def getLoss(w,x,y,lam):
 #create sgd loop over loss function and grad
 w = np.zeros([flat_partial_train.shape[1],len(np.unique(partial_label_train))])
 lam = 1
-iterations = 100
+iterations = 10000
 learningRate = 1e-3
 losses = []
 for i in range(0,iterations):
