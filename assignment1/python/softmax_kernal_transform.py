@@ -44,6 +44,8 @@ def reshape_matrix(x):
 flat_partial_train = reshape_matrix(partial_train)
 flat_data_val = reshape_matrix(data_val)
 
+flat_partial_train = partial_train
+flat_data_val = data_val
 
 #def reshape_svd(A, comps):
 #    A = A.reshape(A.shape[0], A.shape[1] * A.shape[2])
