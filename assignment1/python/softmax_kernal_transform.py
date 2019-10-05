@@ -27,25 +27,40 @@ plt.show()
 data_val = data_train[25000:,]
 partial_train = data_train[:25000,]
 
+
+#one hot encode y for softmax output 
+def oneHot(y):
+    zeroesY = np.zeros((y.size, y.max() + 1))
+    zeroesY[np.arange(y.size), y] = 1
+    return zeroesY
+
+
+
 #create val labels
-label_val = label_train[25000:,]
-partial_label_train = label_train[: 25000,]
+label_val = oneHot(label_train[25000:,])
+partial_label_train = oneHot(label_train[: 25000,])
 
 
 
 
 #reshape data
-def reshape_matrix(x):
-   x_1=np.add.reduceat(x,np.arange(0,28,2),1)
-   x_2=np.add.reduceat(x_1,np.arange(0,28,2),2)
-   x_v=x_2.reshape(x_2.shape[0],-1)
-   return x_v
+#def reshape_matrix(x):
+#   x_1=np.add.reduceat(x,np.arange(0,28,2),1)
+#   x_2=np.add.reduceat(x_1,np.arange(0,28,2),2)
+#   x_v=x_2.reshape(x_2.shape[0],-1)
+#   return x_v
 
-flat_partial_train = reshape_matrix(partial_train)
-flat_data_val = reshape_matrix(data_val)
+#flat_partial_train = reshape_matrix(partial_train)
+#flat_data_val = reshape_matrix(data_val)
 
-flat_partial_train = partial_train
-flat_data_val = data_val
+flat_partial_train = partial_train.reshape(25000, 28 * 28)
+flat_data_val = data_val.reshape(5000, 28 * 28 )
+
+
+# test
+var = np.var(flat_partial_train, axis = 0)
+var[var < 0.000001]
+
 
 #def reshape_svd(A, comps):
 #    A = A.reshape(A.shape[0], A.shape[1] * A.shape[2])
@@ -70,23 +85,43 @@ def softmax(Z): # Todo
     return A
 
 #define softmax gradient 
-def softmax_grad(x, y, w):
+#def softmax_grad(x, y, w):
+#    A = softmax(x.dot(w))    # shape of (N, C)
+#    id0 = range(x.shape[0])  # number of train data
+#    A[id0, y] -= 1           # A - Y, shape of (N, C)
+#    return x.T.dot(A)/x.shape[0]
+
+#define softmax gradient 
+def softmax_grad(x, y, w, l):
     A = softmax(x.dot(w))    # shape of (N, C)
-    id0 = range(x.shape[0])  # number of train data
-    A[id0, y] -= 1           # A - Y, shape of (N, C)
-    return x.T.dot(A)/x.shape[0]
+    n = x.shape[0] 
+    return  -((np.dot(x.T,(y - A))/n)) + l*w 
 
     
-#define softmax loss 
-def softmax_loss(x, y, w):
-    A = softmax(x.dot(w))
-    id0 = range(x.shape[0])
-    return -np.mean(np.log(A[id0, y]))
 
+
+
+#define softmax loss 
+#def softmax_loss(x, y, w):
+#    A = softmax(x.dot(w))
+#    id0 = range(x.shape[0])
+#    return -np.mean(np.log(A[id0, y]))
+
+def softmax_loss(x, y, w, l):
+    A = softmax(x.dot(w))
+    n = x.shape[0] 
+    return (-1/n) * np.sum(y * np.log(A)) + (l/2)*np.sum(w*w) 
+
+def data_iter(batch_size):
+    idx = list(range(n))
+    random.shuffle(idx)
+    for batch_i, i in enumerate(range(0, n, batch_size)):
+        j = nd.array(idx[i: min(i + batch_size, num_examples)])
+        yield batch_i, X.take(j), y.take(j)
 
 ####other loop
 
-def softmax_fit(X, y, W, lr = 0.01, nepoches = 20, tol = 1e-5, batch_size = 1000):
+def softmax_fit(X, y, W, lr = 0.01, nepoches = 20, tol = 1e-5, batch_size = 1000, l):
     W_old = W.copy()
     ep = 0 
     loss_hist = [softmax_loss(X, y, W)] # store history of loss 
@@ -106,9 +141,11 @@ def softmax_fit(X, y, W, lr = 0.01, nepoches = 20, tol = 1e-5, batch_size = 1000
         W_old = W.copy()
     return W, loss_hist 
 
-W_init = np.random.randn(flat_partial_train.shape[1], len(np.unique(partial_label_train)))
-W, loss_hist = softmax_fit(flat_partial_train, partial_label_train , W_init, batch_size = 10, nepoches = 100, lr = 0.05)
+W_init = np.random.randn(flat_partial_train.shape[1], len(partial_label_train[1]))
+W, loss_hist = softmax_fit(flat_partial_train, partial_label_train , W_init, batch_size = 10, nepoches = 100, lr = 0.05, l = 2)
     
+
+
 
 plt.plot(loss_hist)
 plt.xlabel('number of epoches', fontsize = 13)
