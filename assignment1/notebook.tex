@@ -1,0 +1,1001 @@
+
+% Default to the notebook output style
+
+    
+
+
+% Inherit from the specified cell style.
+
+
+
+
+    
+\documentclass[11pt]{article}
+
+    
+    
+    \usepackage[T1]{fontenc}
+    % Nicer default font (+ math font) than Computer Modern for most use cases
+    \usepackage{mathpazo}
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % We will generate all images so they have a width \maxwidth. This means
+    % that they will get their normal width if they fit onto the page, but
+    % are scaled down if they would overflow the margins.
+    \makeatletter
+    \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth
+    \else\Gin@nat@width\fi}
+    \makeatother
+    \let\Oldincludegraphics\includegraphics
+    % Set max figure width to be 80% of text width, for now hardcoded.
+    \renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=.8\maxwidth]{#1}}
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionLabelFormat{nolabel}{}
+    \captionsetup{labelformat=nolabel}
+
+    \usepackage{adjustbox} % Used to constrain images to a maximum size 
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage[utf8x]{inputenc} % Allow utf-8 characters in the tex document
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range 
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    
+
+    
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatability definitions
+    \def\gt{>}
+    \def\lt{<}
+    % Document parameters
+    \title{SID490270624\_SID490277069\_SID312090730}
+    
+    
+    
+
+    % Pygments definitions
+    
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % Exact colors from NB
+    \definecolor{incolor}{rgb}{0.0, 0.0, 0.5}
+    \definecolor{outcolor}{rgb}{0.545, 0.0, 0.0}
+
+
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+    \begin{document}
+    
+    
+    \maketitle
+    
+    
+
+    
+    \hypertarget{comp5138-assignment-1---sem-2-2019}{%
+\section{COMP5138 Assignment 1 - Sem 2
+2019}\label{comp5138-assignment-1---sem-2-2019}}
+
+    \hypertarget{softmax-classifier}{%
+\section{Softmax Classifier}\label{softmax-classifier}}
+
+    \hypertarget{source-data-input}{%
+\subsection{Source Data Input}\label{source-data-input}}
+
+    This script assumes images\_training.h5, labels\_training.h5,
+images\_testing.h5 and labels\_testing\_2000.h5 are in a child folder
+called `Input' and that there is a child folder called `Output' to
+generate the predicted label .h5 into.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}197}]:} \PY{k+kn}{import} \PY{n+nn}{h5py}
+          \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+          \PY{k+kn}{import} \PY{n+nn}{scipy} \PY{k}{as} \PY{n+nn}{sp}
+          \PY{k+kn}{import} \PY{n+nn}{time}
+          \PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+          
+          
+          \PY{k}{with} \PY{n}{h5py}\PY{o}{.}\PY{n}{File}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{./Input/images\PYZus{}training.h5}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{H}\PY{p}{:}
+              \PY{n}{data\PYZus{}train} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{n}{H}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{datatrain}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+          \PY{k}{with} \PY{n}{h5py}\PY{o}{.}\PY{n}{File}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{./Input/labels\PYZus{}training.h5}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{H}\PY{p}{:}
+              \PY{n}{label\PYZus{}train} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{n}{H}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{labeltrain}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{} using H[\PYZsq{}datatest\PYZsq{}], H[\PYZsq{}labeltest\PYZsq{}] for test dataset.}
+          \PY{n+nb}{print}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{o}{.}\PY{n}{shape}\PY{p}{,}\PY{n}{label\PYZus{}train}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+(30000, 784) (30000,)
+
+    \end{Verbatim}
+
+    \hypertarget{pre-processing}{%
+\subsection{Pre-Processing}\label{pre-processing}}
+
+    First we seperate 5000 records from the train data set to use as a
+validation set. We verify that the last 5000 records of the training set
+are a representative sample of the 10 classes in Fashion MNIST
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}180}]:} \PY{n}{unique}\PY{p}{,} \PY{n}{counts} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{unique}\PY{p}{(}\PY{n}{label\PYZus{}train}\PY{p}{[}\PY{l+m+mi}{25000}\PY{p}{:}\PY{p}{,}\PY{p}{]}\PY{p}{,} \PY{n}{return\PYZus{}counts}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+          \PY{n+nb}{print}\PY{p}{(}\PY{n+nb}{dict}\PY{p}{(}\PY{n+nb}{zip}\PY{p}{(}\PY{n}{unique}\PY{p}{,} \PY{n}{counts}\PY{p}{)}\PY{p}{)}\PY{p}{)} \PY{c+c1}{\PYZsh{}display counts of classes in candidate validation set}
+          
+          \PY{c+c1}{\PYZsh{}separate training and validation set }
+          \PY{n}{data\PYZus{}val} \PY{o}{=} \PY{n}{data\PYZus{}train}\PY{p}{[}\PY{l+m+mi}{25000}\PY{p}{:}\PY{p}{,}\PY{p}{]}
+          \PY{n}{data\PYZus{}partial\PYZus{}train} \PY{o}{=} \PY{n}{data\PYZus{}train}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{25000}\PY{p}{,}\PY{p}{]}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+\{0: 507, 1: 478, 2: 523, 3: 511, 4: 467, 5: 508, 6: 499, 7: 514, 8: 490, 9: 503\}
+
+    \end{Verbatim}
+
+    Next we perform the same train/val split on the labels training set. We
+then one hot encode the labels vector, changing its shape from size
+(samples,) to (samples, classes).
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}181}]:} \PY{c+c1}{\PYZsh{}one hot encode y for softmax output }
+          \PY{k}{def} \PY{n+nf}{oneHot}\PY{p}{(}\PY{n}{y}\PY{p}{)}\PY{p}{:}
+              \PY{n}{zeroesY} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{y}\PY{o}{.}\PY{n}{size}\PY{p}{,} \PY{n}{y}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{p}{)} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)} \PY{c+c1}{\PYZsh{}generate matrix of zeroes shape (samples, classes)}
+              \PY{n}{zeroesY}\PY{p}{[}\PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{n}{y}\PY{o}{.}\PY{n}{size}\PY{p}{)}\PY{p}{,} \PY{n}{y}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{1} \PY{c+c1}{\PYZsh{}insert value 1 at label y\PYZsq{}s scalar class value}
+              \PY{k}{return} \PY{n}{zeroesY}
+          
+          \PY{n}{label\PYZus{}val} \PY{o}{=} \PY{n}{oneHot}\PY{p}{(}\PY{n}{label\PYZus{}train}\PY{p}{[}\PY{l+m+mi}{25000}\PY{p}{:}\PY{p}{,}\PY{p}{]}\PY{p}{)} 
+          \PY{n}{label\PYZus{}partial\PYZus{}train} \PY{o}{=} \PY{n}{oneHot}\PY{p}{(}\PY{n}{label\PYZus{}train}\PY{p}{[}\PY{p}{:} \PY{l+m+mi}{25000}\PY{p}{,}\PY{p}{]}\PY{p}{)}
+          
+          \PY{n+nb}{print}\PY{p}{(}\PY{n}{data\PYZus{}partial\PYZus{}train}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+(25000, 784)
+
+    \end{Verbatim}
+
+    We then reshape the train and val data tensors of shape (samples,28,28)
+to matrices of shape (samples, 784)
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}182}]:} \PY{n+nb}{print}\PY{p}{(}\PY{n}{data\PYZus{}partial\PYZus{}train}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+          
+          
+          \PY{k}{def} \PY{n+nf}{pre\PYZus{}proc\PYZus{}mat}\PY{p}{(}\PY{n}{A}\PY{p}{,} \PY{n}{dims} \PY{o}{=} \PY{l+m+mi}{784}\PY{p}{)}\PY{p}{:}
+              \PY{n}{flat\PYZus{}A} \PY{o}{=} \PY{n}{A}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{n}{A}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}\PY{n}{dims}\PY{p}{)}
+              \PY{k}{return} \PY{n}{flat\PYZus{}A}
+          
+          
+          \PY{n}{data\PYZus{}partial\PYZus{}train} \PY{o}{=} \PY{n}{pre\PYZus{}proc\PYZus{}mat}\PY{p}{(}\PY{n}{data\PYZus{}partial\PYZus{}train}\PY{p}{)}
+          \PY{n}{data\PYZus{}val} \PY{o}{=} \PY{n}{pre\PYZus{}proc\PYZus{}mat}\PY{p}{(}\PY{n}{data\PYZus{}val}\PY{p}{)}
+          
+          \PY{n+nb}{print}\PY{p}{(}\PY{n}{data\PYZus{}partial\PYZus{}train}\PY{o}{.}\PY{n}{shape}\PY{p}{,} \PY{n}{data\PYZus{}val}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+(25000, 784)
+(25000, 784) (5000, 784)
+
+    \end{Verbatim}
+
+    Following this we define the SVD fitting function. This takes in two
+parameters (data matrix, number of components), performs SVD
+decomposition and returns the right singular value V of shape (m,k),
+where m is the dimension of features and k is the choice of number of
+leading components from the SVD decomposition. When k \textless{} m
+dimension reduction has been performed: \[
+X_{n, m} V_{m, k}=U S V^{T} V=U_{n, k} S_{k, k}
+\] We perform this fitting procedure on the training set only (taking
+150 components) and use the same V for the validation and test set.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}183}]:} \PY{k}{def} \PY{n+nf}{svd\PYZus{}fit}\PY{p}{(}\PY{n}{A}\PY{p}{,} \PY{n}{comps}\PY{p}{)}\PY{p}{:}   
+              \PY{n}{U}\PY{p}{,} \PY{n}{s}\PY{p}{,} \PY{n}{Vt} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linalg}\PY{o}{.}\PY{n}{svd}\PY{p}{(}\PY{n}{A}\PY{p}{,} \PY{n}{full\PYZus{}matrices}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+              \PY{c+c1}{\PYZsh{}the matrix XV = UD therefore only need right singular value for decomposition}
+              \PY{n}{V\PYZus{}tilde} \PY{o}{=} \PY{n}{Vt}\PY{o}{.}\PY{n}{T}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{:}\PY{n}{comps}\PY{p}{]} \PY{c+c1}{\PYZsh{}create parameter to pick number of leading components to take from V}
+              \PY{k}{return} \PY{n}{V\PYZus{}tilde}
+          
+          \PY{n}{v} \PY{o}{=} \PY{n}{svd\PYZus{}fit}\PY{p}{(}\PY{n}{flat\PYZus{}data\PYZus{}partial\PYZus{}train}\PY{p}{,} \PY{l+m+mi}{150}\PY{p}{)}
+          
+          \PY{n+nb}{print}\PY{p}{(}\PY{n}{v}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{}take dot product of train and val set with V to perform dimension reduction}
+          \PY{n}{dim\PYZus{}partial\PYZus{}train} \PY{o}{=} \PY{n}{data\PYZus{}partial\PYZus{}train}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{v}\PY{p}{)}
+          \PY{n}{dim\PYZus{}data\PYZus{}val} \PY{o}{=} \PY{n}{data\PYZus{}val}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{v}\PY{p}{)}
+          
+          \PY{n+nb}{print}\PY{p}{(} \PY{n}{dim\PYZus{}partial\PYZus{}train}\PY{o}{.}\PY{n}{shape}\PY{p}{,} \PY{n}{dim\PYZus{}data\PYZus{}val}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+(784, 150)
+(25000, 150) (5000, 150)
+
+    \end{Verbatim}
+
+    \hypertarget{classifier}{%
+\subsection{Classifier}\label{classifier}}
+
+    We then move onto the building blocks of the softmax classifer. First we
+define the softmax function. it takes in the matrix X.W which has shape
+(samples,classes) and produces a matrix of shape (samples, classes) that
+sums to one per sample.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}184}]:} \PY{k}{def} \PY{n+nf}{softmax}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{:} 
+              \PY{n}{eX} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{n}{X}\PY{p}{)}
+              \PY{n}{A} \PY{o}{=} \PY{n}{eX} \PY{o}{/} \PY{n}{eX}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{keepdims} \PY{o}{=} \PY{k+kc}{True}\PY{p}{)} \PY{c+c1}{\PYZsh{}here we sum along classes per sample and broadcast this as the denominator}
+              \PY{k}{return} \PY{n}{A}
+\end{Verbatim}
+
+
+    Next we define the loss function taking in the paramaters (data matrix
+X, one hot encoded labels y, weight matrix W, regulariser penalty l):
+
+\[
+L(\boldsymbol{w}, l)=-\sum_{n} \sum_{k} y_{n k} \log \left(\sigma_{\boldsymbol{w}}(\boldsymbol{x})\right)+\frac{l}{2}\|\boldsymbol{w}\|_{2}^{2}
+\]
+
+Where sigma denotes the softmax transformation. The sum over all samples
+and all classes is captured in np.sum() over the matrix with shape
+(samples,classes)
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}185}]:} \PY{c+c1}{\PYZsh{}define softmax loss }
+          \PY{k}{def} \PY{n+nf}{softmax\PYZus{}loss}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{Y}\PY{p}{,} \PY{n}{W}\PY{p}{,} \PY{n}{l}\PY{p}{)}\PY{p}{:}
+              \PY{n}{A} \PY{o}{=} \PY{n}{softmax}\PY{p}{(}\PY{n}{X}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{W}\PY{p}{)}\PY{p}{)}
+              \PY{n}{n} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}
+              \PY{n}{snorm} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linalg}\PY{o}{.}\PY{n}{norm}\PY{p}{(}\PY{n}{W}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
+              \PY{k}{return} \PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{o}{/}\PY{n}{n}\PY{p}{)} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{n}{Y} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{A}\PY{p}{)}\PY{p}{)} \PY{o}{+} \PY{p}{(}\PY{n}{l}\PY{o}{/}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{*}\PY{n}{snorm} \PY{c+c1}{\PYZsh{}np.sum over the matrix captures summing over both classes and samples}
+\end{Verbatim}
+
+
+    We define the direct gradient of the above loss function by creating a
+function that takes in the same paramaters: \[
+\frac{1}{n} \sum_{n}\left(\sigma_{w}\left(\boldsymbol{x}_{n}\right)-y_{n}\right) \boldsymbol{x}^{T}+l \boldsymbol{w}
+\]
+
+The output takes the shape (features, classes), preparing to be minused
+from the identical shaped weight vector W. We slightly change the above
+formulation to compute the gradient over the whole data matrix with
+shape (samples, features). This requires a dot product with the matrix
+(A-Y) that has shape (samples, classes).
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}186}]:} \PY{c+c1}{\PYZsh{}define softmax gradient }
+          \PY{k}{def} \PY{n+nf}{softmax\PYZus{}grad}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{Y}\PY{p}{,} \PY{n}{W}\PY{p}{,} \PY{n}{l}\PY{p}{)}\PY{p}{:}
+              \PY{n}{A} \PY{o}{=} \PY{n}{softmax}\PY{p}{(}\PY{n}{X}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{W}\PY{p}{)}\PY{p}{)}  
+              \PY{n}{n} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)} 
+              \PY{k}{return}  \PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{X}\PY{o}{.}\PY{n}{T}\PY{p}{,}\PY{p}{(}\PY{n}{A} \PY{o}{\PYZhy{}} \PY{n}{Y}\PY{p}{)}\PY{p}{)}\PY{o}{/}\PY{n}{n}\PY{p}{)} \PY{o}{+} \PY{n}{l}\PY{o}{*}\PY{n}{W}
+\end{Verbatim}
+
+
+    With the softmax loss and gradients defined we can now define the
+fitting procedure. Here we employ batch gradient descent. This procedure
+involves choosing a randomly sampled without replacement batch size
+iteratively to perform gradient operations on. This value times a
+learning rate alpha is then minused from a weight vector. This procedure
+is then repeated over the dataset for a certain number of epochs.
+
+This function takes in a data matrix, the one hot encoded labels, a
+vector to optimise, a ridge penalty l, a number of epochs to optmise
+over and a number of batches per epoch.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}187}]:} \PY{k}{def} \PY{n+nf}{softmax\PYZus{}fit}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{Y}\PY{p}{,} \PY{n}{W}\PY{p}{,} \PY{n}{l}\PY{p}{,} \PY{n}{alpha}\PY{p}{,} \PY{n}{epoch}\PY{p}{,}  \PY{n}{batch}\PY{p}{)}\PY{p}{:}
+              \PY{n}{n} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)} \PY{c+c1}{\PYZsh{}sample size}
+              \PY{n}{loss\PYZus{}hist} \PY{o}{=} \PY{p}{[}\PY{n}{softmax\PYZus{}loss}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{Y}\PY{p}{,} \PY{n}{W}\PY{p}{,} \PY{n}{l}\PY{p}{)}\PY{p}{]} \PY{c+c1}{\PYZsh{}generate intital loss history}
+              \PY{n}{steps} \PY{o}{=} \PY{n+nb}{int}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{ceil}\PY{p}{(}\PY{n}{n}\PY{o}{/}\PY{n}{batch}\PY{p}{)}\PY{p}{)} \PY{c+c1}{\PYZsh{}define the number of steps per epoch, determined by how many batches fit in the sample}
+              \PY{k}{for} \PY{n}{ep} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{epoch}\PY{p}{)}\PY{p}{:} 
+                  \PY{n}{p\PYZus{}ids} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{permutation}\PY{p}{(}\PY{n}{n}\PY{p}{)} \PY{c+c1}{\PYZsh{}generate a set of shuffled ids the size of the sample}
+                  \PY{n}{shuffle\PYZus{}X} \PY{o}{=} \PY{n}{X}\PY{p}{[}\PY{n}{p\PYZus{}ids}\PY{p}{]} \PY{c+c1}{\PYZsh{}apply this shuffled id to data matrix}
+                  \PY{n}{shuffle\PYZus{}Y} \PY{o}{=} \PY{n}{Y}\PY{p}{[}\PY{n}{p\PYZus{}ids}\PY{p}{]} \PY{c+c1}{\PYZsh{}apply this shuffled id to label matrix}
+                  \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{steps}\PY{p}{)}\PY{p}{:} 
+                      \PY{c+c1}{\PYZsh{} get the i\PYZhy{}th batch}
+                      \PY{n}{X\PYZus{}batch} \PY{o}{=} \PY{n}{shuffle\PYZus{}X}\PY{p}{[}\PY{n}{i}\PY{p}{:}\PY{n}{i} \PY{o}{+} \PY{n}{batch}\PY{p}{,} \PY{p}{:}\PY{p}{]} \PY{c+c1}{\PYZsh{}subset data matrix to size batch starting at step point i}
+                      \PY{n}{Y\PYZus{}batch} \PY{o}{=} \PY{n}{shuffle\PYZus{}Y}\PY{p}{[}\PY{n}{i}\PY{p}{:}\PY{n}{i} \PY{o}{+} \PY{n}{batch}\PY{p}{]} \PY{c+c1}{\PYZsh{}perform same operation to label matrix}
+                      \PY{n}{W} \PY{o}{\PYZhy{}}\PY{o}{=}  \PY{n}{alpha} \PY{o}{*} \PY{n}{softmax\PYZus{}grad}\PY{p}{(}\PY{n}{X\PYZus{}batch}\PY{p}{,} \PY{n}{Y\PYZus{}batch}\PY{p}{,} \PY{n}{W}\PY{p}{,} \PY{n}{l}\PY{p}{)} \PY{c+c1}{\PYZsh{}minus gradient for current w times learning rate from next w}
+                  \PY{n}{loss\PYZus{}hist}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{softmax\PYZus{}loss}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{Y}\PY{p}{,} \PY{n}{W}\PY{p}{,} \PY{n}{l}\PY{p}{)}\PY{p}{)} \PY{c+c1}{\PYZsh{}persist loss over runs}
+              \PY{k}{return} \PY{n}{W}\PY{p}{,} \PY{n}{loss\PYZus{}hist}
+\end{Verbatim}
+
+
+    Having defined the softmax fitting algorithm we now generate initial
+values for the weight vector with shape (features, classes) and run the
+fitting algorithm on our chosen hyperparameters
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}188}]:} \PY{n}{W\PYZus{}rand} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{n}{dim\PYZus{}partial\PYZus{}train}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{label\PYZus{}partial\PYZus{}train}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+          \PY{n}{W}\PY{p}{,} \PY{n}{loss\PYZus{}hist} \PY{o}{=} \PY{n}{softmax\PYZus{}fit}\PY{p}{(}\PY{n}{dim\PYZus{}partial\PYZus{}train}\PY{p}{,} 
+                                                \PY{n}{label\PYZus{}partial\PYZus{}train} \PY{p}{,} 
+                                                \PY{n}{W\PYZus{}rand}\PY{p}{,} 
+                                                \PY{n}{epoch} \PY{o}{=} \PY{l+m+mi}{1500}\PY{p}{,} 
+                                                \PY{n}{batch} \PY{o}{=} \PY{l+m+mi}{1000}\PY{p}{,}
+                                                \PY{n}{alpha} \PY{o}{=} \PY{l+m+mf}{0.1}\PY{p}{,} 
+                                                \PY{n}{l} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)}
+\end{Verbatim}
+
+
+    Now that we have trained the weight paramaters we can report the maximum
+probability from the softmax function to retrieve our model predictions.
+Accuracy is then assessed by summing where the condition for predicted
+values and actual values is equivalent and dividing this by the total
+length of predictions
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}189}]:} \PY{c+c1}{\PYZsh{}make predictions from softmax}
+          \PY{k}{def} \PY{n+nf}{pred}\PY{p}{(}\PY{n}{W}\PY{p}{,} \PY{n}{X}\PY{p}{)}\PY{p}{:}
+              \PY{n}{A} \PY{o}{=} \PY{n}{softmax}\PY{p}{(}\PY{n}{X}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{W}\PY{p}{)}\PY{p}{)}
+              \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{argmax}\PY{p}{(}\PY{n}{A}\PY{p}{,} \PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{1}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{}accuracy}
+          \PY{k}{def} \PY{n+nf}{accuracy}\PY{p}{(}\PY{n}{y\PYZus{}pred}\PY{p}{,}\PY{n}{y}\PY{p}{)}\PY{p}{:}
+              \PY{n}{results} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{label}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{y}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{answer}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{y} \PY{o}{==} \PY{n}{y\PYZus{}pred}\PY{p}{\PYZcb{}}\PY{p}{)}
+              \PY{k}{return} \PY{n}{results}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{answer}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}\PY{o}{/}\PY{n+nb}{len}\PY{p}{(}\PY{n}{results}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}190}]:} \PY{n}{y\PYZus{}pre} \PY{o}{=} \PY{n}{pred}\PY{p}{(}\PY{n}{W}\PY{p}{,}\PY{n}{dim\PYZus{}data\PYZus{}val}\PY{p}{)}
+          \PY{n}{val\PYZus{}result} \PY{o}{=} \PY{n}{accuracy}\PY{p}{(}\PY{n}{y\PYZus{}pre}\PY{p}{,}\PY{n}{label\PYZus{}train}\PY{p}{[}\PY{l+m+mi}{25000}\PY{p}{:}\PY{p}{,}\PY{p}{]}\PY{p}{)}
+          \PY{n+nb}{print}\PY{p}{(}\PY{n}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Validation set accuracy is }\PY{l+s+si}{\PYZob{}val\PYZus{}result\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Validation set accuracy is 0.8392
+
+    \end{Verbatim}
+
+    \hypertarget{generate-test-result}{%
+\subsection{Generate Test Result}\label{generate-test-result}}
+
+    The preprocessing step can then be repeated to generate predictions for
+the test set:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}191}]:} \PY{k}{with} \PY{n}{h5py}\PY{o}{.}\PY{n}{File}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{./Input/images\PYZus{}testing.h5}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{H}\PY{p}{:}
+              \PY{n}{data\PYZus{}test} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{n}{H}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{datatest}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+          \PY{k}{with} \PY{n}{h5py}\PY{o}{.}\PY{n}{File}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{./Input/labels\PYZus{}testing\PYZus{}2000.h5}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{H}\PY{p}{:}
+              \PY{n}{label\PYZus{}test} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{n}{H}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{labeltest}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}192}]:} \PY{n+nb}{print}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{}subset to labelled set}
+          \PY{n}{data\PYZus{}test\PYZus{}sub} \PY{o}{=} \PY{n}{data\PYZus{}test}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{2000}\PY{p}{,}\PY{p}{:}\PY{p}{]}
+          
+          \PY{n}{data\PYZus{}test\PYZus{}sub} \PY{o}{=} \PY{n}{pre\PYZus{}proc\PYZus{}mat}\PY{p}{(}\PY{n}{data\PYZus{}test\PYZus{}label}\PY{p}{)}
+          
+          \PY{n}{dim\PYZus{}data\PYZus{}test\PYZus{}sub} \PY{o}{=} \PY{n}{data\PYZus{}test\PYZus{}sub}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{v}\PY{p}{)}
+          
+          \PY{n+nb}{print}\PY{p}{(}\PY{n}{dim\PYZus{}data\PYZus{}test\PYZus{}sub}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+(10000, 784)
+(2000, 150)
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}193}]:} \PY{n}{test\PYZus{}result} \PY{o}{=} \PY{n}{accuracy}\PY{p}{(}\PY{n}{pred}\PY{p}{(}\PY{n}{W}\PY{p}{,} \PY{n}{dim\PYZus{}data\PYZus{}test\PYZus{}sub} \PY{p}{)}\PY{p}{,} \PY{n}{label\PYZus{}test}\PY{p}{)}
+          
+          \PY{n+nb}{print}\PY{p}{(}\PY{n}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Test set accuracy is }\PY{l+s+si}{\PYZob{}test\PYZus{}result\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Test set accuracy is 0.826
+
+    \end{Verbatim}
+
+    \hypertarget{generate-full-test-prediction}{%
+\subsection{Generate Full Test
+Prediction}\label{generate-full-test-prediction}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}194}]:} \PY{k}{with} \PY{n}{h5py}\PY{o}{.}\PY{n}{File}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{./Input/images\PYZus{}testing.h5}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{H}\PY{p}{:}
+              \PY{n}{data\PYZus{}test} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{n}{H}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{datatest}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+          \PY{k}{with} \PY{n}{h5py}\PY{o}{.}\PY{n}{File}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{./Input/labels\PYZus{}testing\PYZus{}2000.h5}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{H}\PY{p}{:}
+              \PY{n}{label\PYZus{}test} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{n}{H}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{labeltest}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+              
+          \PY{n+nb}{print}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+(10000, 784)
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}195}]:} \PY{n}{data\PYZus{}test} \PY{o}{=} \PY{n}{pre\PYZus{}proc\PYZus{}mat}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{p}{)}
+          \PY{n+nb}{print}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+          
+          \PY{n}{dim\PYZus{}data\PYZus{}test} \PY{o}{=} \PY{n}{data\PYZus{}test}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{v}\PY{p}{)}
+          
+          \PY{n}{output} \PY{o}{=} \PY{n}{pred}\PY{p}{(}\PY{n}{W}\PY{p}{,} \PY{n}{dim\PYZus{}data\PYZus{}test}\PY{p}{)}
+          
+          \PY{n}{output}\PY{o}{.}\PY{n}{shape}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+(10000, 784)
+
+    \end{Verbatim}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}195}]:} (10000,)
+\end{Verbatim}
+            
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}196}]:} \PY{k}{with} \PY{n}{h5py}\PY{o}{.}\PY{n}{File}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{./Output/predicted\PYZus{}labels.h5}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{w}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{H}\PY{p}{:}
+              \PY{n}{H}\PY{o}{.}\PY{n}{create\PYZus{}dataset}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{output}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{data}\PY{o}{=}\PY{n}{output}\PY{p}{)}
+\end{Verbatim}
+
+
+    \hypertarget{decision-tree-classifier}{%
+\section{Decision Tree Classifier}\label{decision-tree-classifier}}
+
+    \hypertarget{source-data-input}{%
+\subsubsection{Source data input}\label{source-data-input}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}202}]:} \PY{k+kn}{import} \PY{n+nn}{h5py}
+          \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+          \PY{k+kn}{import} \PY{n+nn}{os}
+          \PY{k+kn}{import} \PY{n+nn}{scipy} \PY{k}{as} \PY{n+nn}{sp}
+          \PY{k+kn}{from} \PY{n+nn}{math} \PY{k}{import} \PY{n}{sqrt}
+          \PY{k+kn}{import} \PY{n+nn}{pandas}
+          
+          
+          
+          \PY{k}{with} \PY{n}{h5py}\PY{o}{.}\PY{n}{File}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{./Input/images\PYZus{}training.h5}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{H}\PY{p}{:}
+              \PY{n}{data\PYZus{}train} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{n}{H}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{datatrain}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+          \PY{k}{with} \PY{n}{h5py}\PY{o}{.}\PY{n}{File}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{./Input/labels\PYZus{}training.h5}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{H}\PY{p}{:}
+              \PY{n}{label\PYZus{}train} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{n}{H}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{labeltrain}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+              
+          \PY{k}{with} \PY{n}{h5py}\PY{o}{.}\PY{n}{File}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{./Input/images\PYZus{}testing.h5}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{H}\PY{p}{:}
+              \PY{n}{data\PYZus{}test} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{n}{H}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{datatest}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+          \PY{k}{with} \PY{n}{h5py}\PY{o}{.}\PY{n}{File}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{./Input/labels\PYZus{}testing\PYZus{}2000.h5}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{H}\PY{p}{:}
+              \PY{n}{label\PYZus{}test} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{n}{H}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{labeltest}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+          
+          \PY{n+nb}{print}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{o}{.}\PY{n}{shape}\PY{p}{,}\PY{n}{label\PYZus{}train}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+          \PY{n+nb}{print}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+(30000, 784) (30000,)
+(10000, 784)
+
+    \end{Verbatim}
+
+    \hypertarget{check-source-data}{%
+\subsubsection{Check Source Data}\label{check-source-data}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}203}]:} \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+          \PY{n}{data\PYZus{}train} \PY{o}{=} \PY{n}{data\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{l+m+mi}{28}\PY{p}{,} \PY{l+m+mi}{28}\PY{p}{)}\PY{p}{)}
+          \PY{n}{data\PYZus{}test}\PY{o}{=}\PY{n}{data\PYZus{}test}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{l+m+mi}{28}\PY{p}{,} \PY{l+m+mi}{28}\PY{p}{)}\PY{p}{)}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{cmap}\PY{o}{=}\PY{n}{plt}\PY{o}{.}\PY{n}{get\PYZus{}cmap}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{gray}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{class }\PY{l+s+s2}{\PYZdq{}} \PY{o}{+} \PY{n+nb}{str}\PY{p}{(}\PY{n}{label\PYZus{}train}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{: T\PYZhy{}shirt/Top}\PY{l+s+s2}{\PYZdq{}} \PY{p}{)}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_41_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{date-pre-processing}{%
+\subsubsection{Date Pre-processing}\label{date-pre-processing}}
+
+    As the values are continuous float, we need to bin the data, i.e.~put
+the values into categories based on their value. We did this by
+multiplying all values by 10 and converting them into integers and as
+such we created 10 categories/bins labelled as 0 to 9.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}204}]:} \PY{c+c1}{\PYZsh{}convert the array value into int in order to bin the data}
+          \PY{k}{def} \PY{n+nf}{Cover\PYZus{}to\PYZus{}int}\PY{p}{(}\PY{n}{array\PYZus{}x}\PY{p}{)}\PY{p}{:}
+          	\PY{n}{x}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{multiply}\PY{p}{(}\PY{n}{array\PYZus{}x}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{)}
+          	\PY{k}{return} \PY{n}{x}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{int}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{}create val set}
+          \PY{n}{data\PYZus{}val} \PY{o}{=} \PY{n}{Cover\PYZus{}to\PYZus{}int}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{[}\PY{l+m+mi}{25000}\PY{p}{:}\PY{l+m+mi}{30000}\PY{p}{,}\PY{p}{]}\PY{p}{)}
+          \PY{n}{partial\PYZus{}train} \PY{o}{=} \PY{n}{Cover\PYZus{}to\PYZus{}int}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{25000}\PY{p}{,}\PY{p}{]}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{}create val labels}
+          \PY{n}{label\PYZus{}val} \PY{o}{=} \PY{n}{label\PYZus{}train}\PY{p}{[}\PY{l+m+mi}{25000}\PY{p}{:}\PY{l+m+mi}{30000}\PY{p}{,}\PY{p}{]}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{int}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+          \PY{n}{partial\PYZus{}label\PYZus{}train} \PY{o}{=} \PY{n}{label\PYZus{}train}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{25000}\PY{p}{,}\PY{p}{]}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{int}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+          
+          
+          \PY{c+c1}{\PYZsh{}create testing set}
+          \PY{n}{data\PYZus{}test}\PY{o}{=}\PY{n}{Cover\PYZus{}to\PYZus{}int}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{2000}\PY{p}{]}\PY{p}{)}
+          
+          \PY{n+nb}{print}\PY{p}{(}\PY{n}{data\PYZus{}val}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+(5000, 28, 28)
+
+    \end{Verbatim}
+
+    For data transformation,we use numpy.reduceat function to combine every
+4 adjacent values on the matrix into 1 value by taking the their average
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}205}]:} \PY{c+c1}{\PYZsh{}reshape data}
+          \PY{k}{def} \PY{n+nf}{reshape\PYZus{}matrix}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{:}
+              \PY{n}{x\PYZus{}1}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{add}\PY{o}{.}\PY{n}{reduceat}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{28}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+              \PY{n}{x\PYZus{}2}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{add}\PY{o}{.}\PY{n}{reduceat}\PY{p}{(}\PY{n}{x\PYZus{}1}\PY{p}{,}\PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{28}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}
+              \PY{n}{x\PYZus{}3}\PY{o}{=}\PY{n}{x\PYZus{}2}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{n}{x\PYZus{}2}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
+              \PY{n}{x\PYZus{}v}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{multiply}\PY{p}{(}\PY{n}{x\PYZus{}3}\PY{p}{,} \PY{l+m+mf}{0.25}\PY{p}{)}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{int}\PY{p}{)}
+              \PY{k}{return} \PY{n}{x\PYZus{}v}
+          
+          \PY{n}{flat\PYZus{}partial\PYZus{}train} \PY{o}{=} \PY{n}{reshape\PYZus{}matrix}\PY{p}{(}\PY{n}{partial\PYZus{}train}\PY{p}{)}
+          \PY{n}{flat\PYZus{}data\PYZus{}val} \PY{o}{=} \PY{n}{reshape\PYZus{}matrix}\PY{p}{(}\PY{n}{data\PYZus{}val}\PY{p}{)}
+          \PY{n}{flat\PYZus{}data\PYZus{}test} \PY{o}{=} \PY{n}{reshape\PYZus{}matrix}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{p}{)}
+\end{Verbatim}
+
+
+    Check the date distribution between bins
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}206}]:} \PY{n}{uniqueValues}\PY{p}{,} \PY{n}{Count} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{unique}\PY{p}{(}\PY{n}{flat\PYZus{}partial\PYZus{}train}\PY{p}{,} \PY{n}{return\PYZus{}counts}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Unique Values : }\PY{l+s+s2}{\PYZdq{}} \PY{p}{,} \PY{n}{uniqueValues}\PY{p}{)}
+          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Occurrence Count : }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{Count}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Unique Values :  [ 0  1  2  3  4  5  6  7  8  9 10]
+Occurrence Count :  [2484948  234889  247824  264361  274948  275550  315742  365818  359926
+   75954      40]
+
+    \end{Verbatim}
+
+    As the count is classs 9 and 10 are significantly lower than other bins,
+they are combined into bin 9
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}207}]:} \PY{n}{flat\PYZus{}partial\PYZus{}train}\PY{p}{[}\PY{n}{flat\PYZus{}partial\PYZus{}train} \PY{o}{\PYZgt{}} \PY{l+m+mi}{8}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{9}
+\end{Verbatim}
+
+
+    Combine training data with labels
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}208}]:} \PY{c+c1}{\PYZsh{}covert the matrix into 2 dimension}
+          \PY{n}{train\PYZus{}label\PYZus{}reshaped}\PY{o}{=}\PY{n}{partial\PYZus{}label\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{n}{partial\PYZus{}label\PYZus{}train}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{}add the label data as the last feature to the train data}
+          \PY{n}{Train\PYZus{}data} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{hstack}\PY{p}{(}\PY{p}{(}\PY{n}{flat\PYZus{}partial\PYZus{}train}\PY{p}{,}\PY{n}{train\PYZus{}label\PYZus{}reshaped}\PY{p}{)}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{}covert the matrix into 2 dimension}
+          \PY{n}{test\PYZus{}label\PYZus{}reshaped}\PY{o}{=}\PY{n}{label\PYZus{}val}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{n}{label\PYZus{}val}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{}add the label data as the last feature to the train data}
+          \PY{n}{Test\PYZus{}data} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{hstack}\PY{p}{(}\PY{p}{(}\PY{n}{flat\PYZus{}data\PYZus{}val}\PY{p}{,}\PY{n}{test\PYZus{}label\PYZus{}reshaped}\PY{p}{)}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{}covert the matrix into 2 dimension}
+          \PY{n}{access\PYZus{}label\PYZus{}reshaped}\PY{o}{=}\PY{n}{label\PYZus{}test}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{n}{label\PYZus{}test}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{}add the label data as the last feature to the train data}
+          \PY{n}{Access\PYZus{}data} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{hstack}\PY{p}{(}\PY{p}{(}\PY{n}{flat\PYZus{}data\PYZus{}test}\PY{p}{,}\PY{n}{access\PYZus{}label\PYZus{}reshaped}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \hypertarget{decision-tree}{%
+\subsubsection{Decision Tree}\label{decision-tree}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}24}]:} \PY{c+c1}{\PYZsh{} Split dataset according the the feature (ref) and criterion (value)}
+         \PY{k}{def} \PY{n+nf}{data\PYZus{}split}\PY{p}{(}\PY{n}{ref}\PY{p}{,} \PY{n}{value}\PY{p}{,} \PY{n}{dataset}\PY{p}{)}\PY{p}{:}
+         	\PY{n}{l}\PY{p}{,} \PY{n}{r} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n+nb}{list}\PY{p}{(}\PY{p}{)}   
+             \PY{c+c1}{\PYZsh{}check all rows in dataset}
+         	\PY{k}{for} \PY{n}{row} \PY{o+ow}{in} \PY{n}{dataset}\PY{p}{:}
+                 \PY{c+c1}{\PYZsh{}if a value in the dataset is less then the criterion, put it to the left node, otherwise put it to the right node}
+         		\PY{k}{if} \PY{n}{row}\PY{p}{[}\PY{n}{ref}\PY{p}{]} \PY{o}{\PYZlt{}} \PY{n}{value}\PY{p}{:}
+         			\PY{n}{l}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{row}\PY{p}{)}
+         		\PY{k}{else}\PY{p}{:}
+         			\PY{n}{r}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{row}\PY{p}{)}
+         	\PY{k}{return} \PY{n}{l}\PY{p}{,} \PY{n}{r}
+          
+         \PY{c+c1}{\PYZsh{} Calculate the Gini index}
+         \PY{k}{def} \PY{n+nf}{gini\PYZus{}index}\PY{p}{(}\PY{n}{DataSplit}\PY{p}{,} \PY{n}{classes}\PY{p}{)}\PY{p}{:}
+         	\PY{c+c1}{\PYZsh{} count all samples at split point}
+         	\PY{n}{count\PYZus{}samples} \PY{o}{=} \PY{n+nb}{float}\PY{p}{(}\PY{n+nb}{sum}\PY{p}{(}\PY{p}{[}\PY{n+nb}{len}\PY{p}{(}\PY{n}{group}\PY{p}{)} \PY{k}{for} \PY{n}{group} \PY{o+ow}{in} \PY{n}{DataSplit}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+         	\PY{c+c1}{\PYZsh{} sum weighted Gini ref for each group}
+         	\PY{n}{gini} \PY{o}{=} \PY{l+m+mf}{0.0}
+         	\PY{k}{for} \PY{n}{group} \PY{o+ow}{in} \PY{n}{DataSplit}\PY{p}{:}
+                 \PY{c+c1}{\PYZsh{} calculate number of samples in the group}
+         		\PY{n}{size} \PY{o}{=} \PY{n+nb}{float}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{group}\PY{p}{)}\PY{p}{)}
+                 \PY{c+c1}{\PYZsh{} set initial score at 0}
+         		\PY{n}{score} \PY{o}{=} \PY{l+m+mf}{0.0}
+         		\PY{c+c1}{\PYZsh{} avoid divide by zero by giving it 0 score directly}
+         		\PY{k}{if} \PY{n}{size} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:}
+         			\PY{n}{score} \PY{o}{=} \PY{l+m+mf}{0.0}
+         		\PY{k}{else}\PY{p}{:}			        
+                     \PY{c+c1}{\PYZsh{} score the group based on the score for each class}
+         			\PY{k}{for} \PY{n}{class\PYZus{}value} \PY{o+ow}{in} \PY{n}{classes}\PY{p}{:}
+         				\PY{n}{class\PYZus{}sub}\PY{o}{=}  \PY{p}{[}\PY{n}{row}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]} \PY{k}{for} \PY{n}{row} \PY{o+ow}{in} \PY{n}{group}\PY{p}{]}
+                         \PY{c+c1}{\PYZsh{} calculate Proportion = number of classes / number of samples in the group}
+         				\PY{n}{p} \PY{o}{=} \PY{n}{class\PYZus{}sub}\PY{o}{.}\PY{n}{count}\PY{p}{(}\PY{n}{class\PYZus{}value}\PY{p}{)} \PY{o}{/} \PY{n}{size}
+         				\PY{n}{score} \PY{o}{+}\PY{o}{=} \PY{n}{p} \PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
+         		\PY{c+c1}{\PYZsh{} Gini index = [1\PYZhy{}∑ (proportion * proportion)] * (group size/ dataset size)}
+         		\PY{n}{gini} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{l+m+mf}{1.0} \PY{o}{\PYZhy{}} \PY{n}{score}\PY{p}{)} \PY{o}{*} \PY{p}{(}\PY{n}{size} \PY{o}{/} \PY{n}{count\PYZus{}samples}\PY{p}{)}
+         	\PY{k}{return} \PY{n}{gini}
+          
+         \PY{c+c1}{\PYZsh{} Select the best split point for a dataset}
+         \PY{k}{def} \PY{n+nf}{get\PYZus{}split}\PY{p}{(}\PY{n}{dataset}\PY{p}{)}\PY{p}{:}
+         	\PY{n}{unique\PYZus{}class\PYZus{}val} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{set}\PY{p}{(}\PY{n}{row}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]} \PY{k}{for} \PY{n}{row} \PY{o+ow}{in} \PY{n}{dataset}\PY{p}{)}\PY{p}{)}
+         	\PY{n}{b\PYZus{}score}\PY{o}{=}\PY{l+m+mi}{9999}
+             \PY{c+c1}{\PYZsh{} get the number of columns  }
+         	\PY{n}{n\PYZus{}feature} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{dataset}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1} 
+         	\PY{k}{for} \PY{n}{ref} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{n\PYZus{}feature}\PY{p}{)}\PY{p}{:}
+                 \PY{c+c1}{\PYZsh{} get unique values in the column  }
+         		\PY{n}{unique\PYZus{}value}\PY{o}{=}\PY{n+nb}{set}\PY{p}{(}\PY{p}{[}\PY{n}{row}\PY{p}{[}\PY{n}{ref}\PY{p}{]} \PY{k}{for} \PY{n}{row} \PY{o+ow}{in} \PY{n}{dataset}\PY{p}{]}\PY{p}{)}
+         		\PY{k}{for} \PY{n}{criteria} \PY{o+ow}{in} \PY{n}{unique\PYZus{}value}\PY{p}{:}
+                     \PY{c+c1}{\PYZsh{}skip the class 0 and 9 as they cannot split the dataset into two groups}
+         			\PY{k}{if} \PY{n}{criteria}\PY{o}{==}\PY{l+m+mi}{0} \PY{o+ow}{or} \PY{n}{criteria}\PY{o}{==}\PY{l+m+mi}{9}\PY{p}{:}
+         				\PY{k}{continue}       
+         			\PY{n}{DataSplit} \PY{o}{=} \PY{n}{data\PYZus{}split}\PY{p}{(}\PY{n}{ref}\PY{p}{,} \PY{n}{criteria}\PY{p}{,} \PY{n}{dataset}\PY{p}{)}
+         			\PY{n}{gini} \PY{o}{=} \PY{n}{gini\PYZus{}index}\PY{p}{(}\PY{n}{DataSplit}\PY{p}{,} \PY{n}{unique\PYZus{}class\PYZus{}val}\PY{p}{)}
+         			\PY{k}{if} \PY{n}{gini} \PY{o}{\PYZlt{}} \PY{n}{b\PYZus{}score}\PY{p}{:}
+         				\PY{n}{b\PYZus{}ref} \PY{o}{=} \PY{n}{ref} 
+         				\PY{n}{b\PYZus{}value} \PY{o}{=} \PY{n}{criteria} 
+         				\PY{n}{b\PYZus{}score} \PY{o}{=} \PY{n}{gini} 
+         				\PY{n}{b\PYZus{}DataSplit} \PY{o}{=} \PY{n}{DataSplit}
+         	\PY{k}{return} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ref}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{b\PYZus{}ref}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{value}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{b\PYZus{}value}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{branch}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{b\PYZus{}DataSplit}\PY{p}{\PYZcb{}}
+          
+         \PY{c+c1}{\PYZsh{} Create a terminal node value}
+         \PY{k}{def} \PY{n+nf}{terminal}\PY{p}{(}\PY{n}{group}\PY{p}{)}\PY{p}{:}
+         	\PY{n}{result\PYZus{}class\PYZus{}val} \PY{o}{=} \PY{p}{[}\PY{n}{row}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]} \PY{k}{for} \PY{n}{row} \PY{o+ow}{in} \PY{n}{group}\PY{p}{]}
+             \PY{c+c1}{\PYZsh{}use most common class value as the output for terminal node}
+         	\PY{n}{output}\PY{o}{=}\PY{n+nb}{max}\PY{p}{(}\PY{n+nb}{set}\PY{p}{(}\PY{n}{result\PYZus{}class\PYZus{}val}\PY{p}{)}\PY{p}{,} \PY{n}{key}\PY{o}{=}\PY{n}{result\PYZus{}class\PYZus{}val}\PY{o}{.}\PY{n}{count}\PY{p}{)}
+         	\PY{k}{return} \PY{n}{output}
+          
+         \PY{c+c1}{\PYZsh{} Create child\PYZhy{}node and terminal node}
+         \PY{k}{def} \PY{n+nf}{split}\PY{p}{(}\PY{n}{node}\PY{p}{,} \PY{n}{max\PYZus{}depth}\PY{p}{,} \PY{n}{min\PYZus{}leaf\PYZus{}size}\PY{p}{,} \PY{n}{depth}\PY{p}{)}\PY{p}{:}
+         	\PY{n}{l}\PY{p}{,} \PY{n}{r} \PY{o}{=} \PY{n}{node}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{branch}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+             \PY{c+c1}{\PYZsh{}delete node as it is not needed}
+         	\PY{k}{del}\PY{p}{(}\PY{n}{node}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{branch}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+         	\PY{n}{len\PYZus{}l}\PY{o}{=}\PY{n+nb}{len}\PY{p}{(}\PY{n}{l}\PY{p}{)}
+         	\PY{n}{len\PYZus{}r}\PY{o}{=}\PY{n+nb}{len}\PY{p}{(}\PY{n}{r}\PY{p}{)}	
+         	\PY{c+c1}{\PYZsh{} if a split is a pure split, i.e. all value in a split belong to the same group. }
+             \PY{c+c1}{\PYZsh{} we wouldn’t be able to further split the data.}
+         	\PY{k}{if} \PY{o+ow}{not} \PY{n}{l} \PY{o+ow}{or} \PY{o+ow}{not} \PY{n}{r}\PY{p}{:}
+         		\PY{n}{node}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{l}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{node}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{terminal}\PY{p}{(}\PY{n}{l} \PY{o}{+} \PY{n}{r}\PY{p}{)}
+         		\PY{k}{return}
+         	\PY{c+c1}{\PYZsh{} if it is over the max\PYZus{}depth, no further split required}
+         	\PY{k}{if} \PY{n}{depth} \PY{o}{\PYZgt{}}\PY{o}{=} \PY{n}{max\PYZus{}depth}\PY{p}{:}
+         		\PY{n}{node}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{l}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{node}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{terminal}\PY{p}{(}\PY{n}{l}\PY{p}{)}\PY{p}{,} \PY{n}{terminal}\PY{p}{(}\PY{n}{r}\PY{p}{)}
+         		\PY{k}{return}
+         	\PY{c+c1}{\PYZsh{} if leave size less than min\PYZus{}leaf\PYZus{}size, no further split required}
+         	\PY{k}{if} \PY{n}{len\PYZus{}l} \PY{o}{\PYZlt{}}\PY{o}{=} \PY{n}{min\PYZus{}leaf\PYZus{}size}\PY{p}{:}      
+         		\PY{n}{node}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{l}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{terminal}\PY{p}{(}\PY{n}{l}\PY{p}{)}
+         	\PY{k}{else}\PY{p}{:}
+                 \PY{c+c1}{\PYZsh{} if leave size is bigger than min\PYZus{}leaf\PYZus{}size, proceed with further split}
+         		\PY{n}{node}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{l}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{get\PYZus{}split}\PY{p}{(}\PY{n}{l}\PY{p}{)}
+         		\PY{n}{depth}\PY{o}{+}\PY{o}{=}\PY{l+m+mi}{1}
+         		\PY{n}{split}\PY{p}{(}\PY{n}{node}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{l}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{max\PYZus{}depth}\PY{p}{,} \PY{n}{min\PYZus{}leaf\PYZus{}size}\PY{p}{,} \PY{n}{depth}\PY{p}{)}
+         	\PY{c+c1}{\PYZsh{} if leave size less than min\PYZus{}leaf\PYZus{}size, no further split required}
+         	\PY{k}{if} \PY{n}{len\PYZus{}r} \PY{o}{\PYZlt{}}\PY{o}{=} \PY{n}{min\PYZus{}leaf\PYZus{}size}\PY{p}{:}
+         		\PY{n}{node}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{terminal}\PY{p}{(}\PY{n}{r}\PY{p}{)}
+         	\PY{k}{else}\PY{p}{:}
+                 \PY{c+c1}{\PYZsh{} if leave size is bigger than min\PYZus{}leaf\PYZus{}size, proceed with further split}
+         		\PY{n}{node}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{get\PYZus{}split}\PY{p}{(}\PY{n}{r}\PY{p}{)}
+         		\PY{n}{depth}\PY{o}{+}\PY{o}{=}\PY{l+m+mi}{1}
+         		\PY{n}{split}\PY{p}{(}\PY{n}{node}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{max\PYZus{}depth}\PY{p}{,} \PY{n}{min\PYZus{}leaf\PYZus{}size}\PY{p}{,} \PY{n}{depth}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{} Call all functions needed to build the decision tree}
+         \PY{k}{def} \PY{n+nf}{build\PYZus{}tree}\PY{p}{(}\PY{n}{train}\PY{p}{,} \PY{n}{max\PYZus{}depth}\PY{p}{,} \PY{n}{min\PYZus{}leaf\PYZus{}size}\PY{p}{)}\PY{p}{:}
+         	\PY{n}{tree} \PY{o}{=} \PY{n}{get\PYZus{}split}\PY{p}{(}\PY{n}{train}\PY{p}{)}
+             \PY{c+c1}{\PYZsh{} set initial depth as 1 as the split starting from root}
+         	\PY{n}{split}\PY{p}{(}\PY{n}{tree}\PY{p}{,} \PY{n}{max\PYZus{}depth}\PY{p}{,} \PY{n}{min\PYZus{}leaf\PYZus{}size}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+         	\PY{k}{return} \PY{n}{tree}
+          
+         \PY{c+c1}{\PYZsh{} Predict with decision tree}
+         \PY{k}{def} \PY{n+nf}{predict}\PY{p}{(}\PY{n}{tree}\PY{p}{,} \PY{n}{row}\PY{p}{)}\PY{p}{:}
+             \PY{c+c1}{\PYZsh{} tree has three components: ref, value, branch}
+             \PY{c+c1}{\PYZsh{} the below code compares data value to criteria for split and determine if the left or right branch should be followed}
+         	\PY{k}{if} \PY{n}{row}\PY{p}{[}\PY{n}{tree}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ref}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]} \PY{o}{\PYZlt{}} \PY{n}{tree}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{value}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{:}
+                 \PY{c+c1}{\PYZsh{} check if the a ternimal node is reached}
+         		\PY{k}{if} \PY{n+nb}{isinstance}\PY{p}{(}\PY{n}{tree}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{l}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n+nb}{dict}\PY{p}{)}\PY{p}{:}
+         			\PY{k}{return} \PY{n}{predict}\PY{p}{(}\PY{n}{tree}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{l}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{row}\PY{p}{)}
+         		\PY{k}{else}\PY{p}{:}
+         			\PY{k}{return} \PY{n}{tree}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{l}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+         	\PY{k}{else}\PY{p}{:}
+                 \PY{c+c1}{\PYZsh{} check if the a ternimal node is reached}
+         		\PY{k}{if} \PY{n+nb}{isinstance}\PY{p}{(}\PY{n}{tree}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n+nb}{dict}\PY{p}{)}\PY{p}{:}
+         			\PY{k}{return} \PY{n}{predict}\PY{p}{(}\PY{n}{tree}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{row}\PY{p}{)}
+         		\PY{k}{else}\PY{p}{:}
+         			\PY{k}{return} \PY{n}{tree}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+         
+          
+          \PY{c+c1}{\PYZsh{} combin everything together}
+         \PY{k}{def} \PY{n+nf}{decision\PYZus{}tree}\PY{p}{(}\PY{n}{train}\PY{p}{,} \PY{n}{test}\PY{p}{,} \PY{n}{max\PYZus{}depth}\PY{p}{,} \PY{n}{min\PYZus{}leaf\PYZus{}size}\PY{p}{)}\PY{p}{:}
+         	\PY{n}{tree} \PY{o}{=} \PY{n}{build\PYZus{}tree}\PY{p}{(}\PY{n}{train}\PY{p}{,} \PY{n}{max\PYZus{}depth}\PY{p}{,} \PY{n}{min\PYZus{}leaf\PYZus{}size}\PY{p}{)}
+             \PY{c+c1}{\PYZsh{} set prediction result as list}
+         	\PY{n}{predictions} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{p}{)}
+             \PY{c+c1}{\PYZsh{} preform the prediction row by row}
+         	\PY{k}{for} \PY{n}{row} \PY{o+ow}{in} \PY{n}{test}\PY{p}{:}
+         		\PY{n}{prediction} \PY{o}{=} \PY{n}{predict}\PY{p}{(}\PY{n}{tree}\PY{p}{,} \PY{n}{row}\PY{p}{)}
+         		\PY{n}{predictions}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{prediction}\PY{p}{)}
+         	\PY{k}{return}\PY{p}{(}\PY{n}{predictions}\PY{p}{)}
+\end{Verbatim}
+
+
+    \hypertarget{predict-with-decision-tree}{%
+\subsubsection{Predict with decision
+tree}\label{predict-with-decision-tree}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}25}]:} \PY{n}{pred} \PY{o}{=} \PY{n}{decision\PYZus{}tree}\PY{p}{(}\PY{n}{Train\PYZus{}data}\PY{p}{,}\PY{n}{Access\PYZus{}data}\PY{p}{,}\PY{l+m+mi}{19}\PY{p}{,}\PY{l+m+mi}{15}\PY{p}{)}
+\end{Verbatim}
+
+
+    \hypertarget{access-prediction-accuracy}{%
+\subsubsection{Access prediction
+accuracy}\label{access-prediction-accuracy}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}28}]:} \PY{k}{def} \PY{n+nf}{accuracy}\PY{p}{(}\PY{n}{pred}\PY{p}{,}\PY{n}{y}\PY{p}{)}\PY{p}{:}
+             \PY{n}{Correct\PYZus{}count}\PY{o}{=}\PY{l+m+mi}{0}
+             \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{n+nb}{len}\PY{p}{(}\PY{n}{pred}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+                 \PY{k}{if} \PY{n}{pred}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{==}\PY{n}{y}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{:}
+                     \PY{n}{Correct\PYZus{}count}\PY{o}{+}\PY{o}{=}\PY{l+m+mi}{1} 
+             \PY{k}{return} \PY{n}{Correct\PYZus{}count}\PY{o}{/}\PY{n+nb}{len}\PY{p}{(}\PY{n}{y}\PY{p}{)}
+         
+         \PY{n}{Pred\PYZus{}Accuracy} \PY{o}{=} \PY{n}{accuracy}\PY{p}{(}\PY{n}{pred}\PY{p}{,}\PY{n}{label\PYZus{}test}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{Pred\PYZus{}Accuracy}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+0.6085
+
+    \end{Verbatim}
+
+    \hypertarget{access-prediction-accuracy}{%
+\subsubsection{Access prediction
+accuracy}\label{access-prediction-accuracy}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{k}{def} \PY{n+nf}{accuracy}\PY{p}{(}\PY{n}{pred}\PY{p}{,}\PY{n}{y}\PY{p}{)}\PY{p}{:}
+            \PY{n}{Correct\PYZus{}count}\PY{o}{=}\PY{l+m+mi}{0}
+            \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{n+nb}{len}\PY{p}{(}\PY{n}{pred}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+                \PY{k}{if} \PY{n}{pred}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{==}\PY{n}{y}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{:}
+                    \PY{n}{Correct\PYZus{}count}\PY{o}{+}\PY{o}{=}\PY{l+m+mi}{1} 
+            \PY{k}{return} \PY{n}{Correct\PYZus{}count}\PY{o}{/}\PY{n+nb}{len}\PY{p}{(}\PY{n}{y}\PY{p}{)}
+        
+        \PY{n}{Pred\PYZus{}Accuracy} \PY{o}{=} \PY{n}{accuracy}\PY{p}{(}\PY{n}{pred}\PY{p}{,}\PY{n}{label\PYZus{}test}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{n}{Pred\PYZus{}Accuracy}\PY{p}{)}
+\end{Verbatim}
+
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+    \end{document}

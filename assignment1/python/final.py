@@ -49,13 +49,14 @@ def oneHot(y):
 label_val = oneHot(label_train[25000:,])
 partial_label_train = oneHot(label_train[: 25000,])
 
+
+
 #perform pca and reshape
 #B is the training set so that all sets can use its mean and std for preproc
-def pre_proc(A):
-    flat_A = A.reshape(A.shape[0], A.shape[1] * A.shape[2])
-#    flat_B = B.reshape(B.shape[0], B.shape[1] * B.shape[2])
-#    Z = (flat_A - np.mean(flat_B, axis = 0))/np.std(flat_B, axis = 0)
+def pre_proc_mat(A, dims = 784):
+    flat_A = A.reshape(A.shape[0],dims)
     return flat_A
+
 
 def svd_fit(A, comps):   
     U, s, Vt = np.linalg.svd(A, full_matrices=False)
@@ -70,14 +71,16 @@ def svd_fit(A, comps):
 flat_partial_train = pre_proc(partial_train)
 flat_data_val = pre_proc(data_val)
 
+flat_partial_train.shape
 #from sklearn import preprocessing
 #scaler = preprocessing.StandardScaler().fit(flat_partial_train)
 
 #flat_partial_train = scaler.transform(flat_partial_train)
 #flat_data_val = scaler.transform(flat_data_val)
 
-v = svd_fit(flat_partial_train, 28*28)
+v = svd_fit(flat_partial_train, 150)
 
+v.shape
 
 flat_partial_train = flat_partial_train.dot(v)
 flat_data_val = flat_data_val.dot(v)
@@ -93,6 +96,16 @@ def softmax(Z): # Todo
     A = e_Z / e_Z.sum(axis = 1, keepdims = True)
     return A
 
+
+
+
+flat_partial_train.dot(W_init).sum(axis =1).shape
+flat_partial_train.dot(W_init).sum(axis = 1, keepdims = True).shape
+flat_partial_train.dot(W_init).shape
+
+
+softmax(flat_partial_train.dot(W_init)).shape
+
 #define softmax loss 
 def softmax_loss(X, y, W, l):
     A = softmax(X.dot(W))
@@ -100,12 +113,35 @@ def softmax_loss(X, y, W, l):
     return (-1/n) * np.sum(y * np.log(A)) + (l/2)*np.sum(W*W) 
 
 
+np.sum(W_init*W_init)
+
+np.linalg.norm(W_init)**2
+
+np.sum(np.sum(flat_partial_train, axis = 0), axis = 0)
+
+np.sum(flat_partial_train)
+
+softmax_grad(flat_partial_train, partial_label_train , W_init, 0).shape
+
+def softmax_loss(X, y, W, l):
+    A = softmax(X.dot(W))
+    n = len(X)
+    snorm = np.linalg.norm(W)**2
+    return (-1/n) * np.sum(y * np.log(A)) + (l/2)*snorm
+
 #define softmax gradient 
 def softmax_grad(X, y, W, l):
     A = softmax(X.dot(W))    # shape of (N, C)
     n = len(X) 
-    return  ((np.dot(X.T,(A - y))/n)) + l*W
+    return  (np.dot(X.T,(A - y))/n) + l*W
 
+
+flat_partial_train.shape
+partial_label_train.shape
+
+np.log(softmax(flat_partial_train.dot(W_init))).shape
+
+partial_label_train.shape
 
 
 def softmax_fit(X, y, W, l, lr = 0.01, nepoches = 20,  batch_size = 1000, ):
@@ -113,7 +149,6 @@ def softmax_fit(X, y, W, l, lr = 0.01, nepoches = 20,  batch_size = 1000, ):
     n = len(X)
     loss_hist = [softmax_loss(X, y, W, l)] # store history of loss 
     steps = int(np.ceil(n/batch_size))
-    t0 = time.time()
     for ep in range(nepoches): 
         p_ids = np.random.permutation(n) # mix data 
         shuffle_x = X[p_ids]
@@ -124,9 +159,6 @@ def softmax_fit(X, y, W, l, lr = 0.01, nepoches = 20,  batch_size = 1000, ):
             y_batch = shuffle_y[i:i + batch_size]
             W -=  lr * softmax_grad(X_batch, y_batch, W, l)
         loss_hist.append(softmax_loss(X, y, W, l))
-    t1 = time.time()
-    runtime = t1 - t0
-    print(f"internal loop speed for {nepoches} epochs and {batch_size} batch size is {runtime} seconds")
     return W, loss_hist
 
 len(flat_partial_train)
@@ -135,10 +167,10 @@ W_init = np.random.randn(flat_partial_train.shape[1], len(partial_label_train[1]
 W, loss_hist = softmax_fit(flat_partial_train, 
                                       partial_label_train , 
                                       W_init, 
-                                      nepoches = 750, 
-                                      batch_size = 100,
-                                      lr = 0.01, 
-                                      l = .00)
+                                      nepoches = 1500, 
+                                      batch_size = 1000,
+                                      lr = 0.1, 
+                                      l = 0.000)
     
 t2 = time.time()
 print(t2 - t1)
@@ -164,5 +196,26 @@ print("Accurancy of model on test set:",accurancy(y_pre,label_train[25000:,]))
 
 results = pd.DataFrame({'label': label_train[25000:,], 'answer': label_train[25000:,] == y_pre})
 
+actuals = pd.DataFrame({'label': label_train[25000:,], 'answer':  y_pre})
+
+actuals.loc[actuals.label == 6].groupby('label').answer.value_counts(normalize = True)
+ 
 props = results.groupby('label').answer.value_counts(normalize = True)
-props
+props.to_csv('test.csv')
+
+
+
+results.groupby('label').answer.value_counts(normalize = True)
+
+
+results = pd.DataFrame({'label': label_train[25000:,], 'answer': label_train[25000:,] == y_pre})
+results.groupby('label').sum()     
+results.groupby('label').agg(['count'])
+
+
+ answer.value_counts(normalize = True)
+ 
+ 
+def accurancy(y_pred,y):
+    results = pd.DataFrame({'label': y, 'answer': y == y_pred})
+    results['answer'].sum()/len(results)
