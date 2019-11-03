@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import GradientBoostingRegressor
-from sklearn.model_selection import cross_validate
+from sklearn.model_selection import RepeatedKFold
 from sklearn.linear_model import SGDRegressor
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
@@ -12,6 +12,10 @@ from sklearn.preprocessing import StandardScaler
 from xgboost import XGBRegressor
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
+from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_absolute_error
+from scipy import special
+
 
 pd.options.mode.chained_assignment = None
 
@@ -20,11 +24,14 @@ raw = pd.read_csv('assignment2/forestfires.csv')
 # subset X columns and Y column
 X = raw.iloc[:, 0:12]
 # log transform
-y = np.log(np.array(raw.iloc[:, 12]) + 1)
-# y = np.array(raw.iloc[:, 12]) NO NEED TO USE
+
+y = np.array(raw.iloc[:, 12]) # NO NEED TO USE
 
 # create random train test split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.001, random_state=42)
+ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.2, random_state=42)
+
+# log transform y_train
+y_log = np.log(y_train + 1)
 
 # cos sin transform categorical sequential features
 # Encode Data
@@ -78,18 +85,19 @@ X_test = X_test[['temp', 'RH', 'wind', 'rain']]
 # X_test = np.concatenate((np.array(X_test), X_test_cat), axis=1)
 
 # scale features
-scaler = MinMaxScaler()
-
-scaler.fit(X_train)
-X_train = scaler.transform(X_train)
-X_test = scaler.transform(X_test)
-
-# standardise features
-#scaler = StandardScaler()
+#scaler = MinMaxScaler()
 
 #scaler.fit(X_train)
 #X_train = scaler.transform(X_train)
 #X_test = scaler.transform(X_test)
+
+# standardise features
+
+scaler = StandardScaler()
+
+scaler.fit(X_train)
+X_train = scaler.transform(X_train)
+X_test = scaler.transform(X_train)
 
 # perform dimension reduction through PCA
 #X_train.shape
@@ -109,35 +117,54 @@ bst = XGBRegressor(objective='reg:squarederror', silent=0, min_child_weight= 10,
 
 
 # turn mse from metric into scorer
-scores = cross_validate(lnr,
+predictions = cross_val_predict(lnr,
                         X_train,
-                        y_train,
+                        y_train_log,
                         cv=10,
-                        return_train_score=True,
-                        scoring='neg_mean_squared_error',
                         n_jobs=16)  # you wil want to change this to your pc number of threads
-print("elastic test", np.mean(scores["test_score"]), "\n elastic train", np.mean(scores["train_score"]))
+
+
+p = np.exp(predictions) - 1
+
+y = y_train
+
+testing = pd.DataFrame({'predict':p, 'actual':y})
+
+# negative log likelihood
+nll = -0.5 * np.log(2* np.pi * np.var(p)) + ((y - np.mean(p)**2)/2 * np.var(p))
+
+# mean square error
+mean_squared_error(y,p)
+np.sqrt(mean_squared_error(y,p))
+mean_absolute_error(y,p)
+
+#define indices to perform repeated kfold over
+rkf = RepeatedKFold(n_splits=10, n_repeats=30, random_state=2652124)
+for train_index, test_index in rkf.split(X_train):
+print("TRAIN:", train_index, "TEST:", test_index)
+    X_train, X_test = X[train_index], X[test_index]
+    y_train, y_test = y[train_index], y[test_index]
 
 
 
-scores = cross_validate(lr,
-                        X_train,
-                        y_train,
-                        cv=10,
-                        return_train_score=True,
-                        scoring='neg_mean_squared_error',
-                        n_jobs=16)  # you wil want to change this to your pc number of threads
-print("lr test", np.mean(scores["test_score"]), "\n lr train", np.mean(scores["train_score"]))
+#scores = cross_validate(lr,
+#                        X_train,
+#                        y_train,
+#                        cv=30,
+#                        return_train_score=True,
+#                        scoring='neg_mean_squared_error',
+#                        n_jobs=16)  # you wil want to change this to your pc number of threads
+#print("lr test", np.mean(np.sqrt(np.negative(scores["test_score"]))), "\n elastic train", np.mean(np.sqrt(np.negative(scores["train_score"]))))
 
 
 
 
 
-scores = cross_validate(bst,
-                        X_train,
-                        y_train,
-                        cv=10,
-                        return_train_score=True,
-                        scoring='neg_mean_squared_error',
-                        n_jobs=16)  # you wil want to change this to your pc number of threads
-print("boosted test", np.mean(scores["test_score"]), "\n boosted train", np.mean(scores["train_score"]))
+#scores = cross_validate(bst,
+#                        X_train,
+#                        y_train,
+#                        cv=10,
+#                        return_train_score=True,
+#                        scoring='neg_mean_squared_error',
+#                        n_jobs=16)  # you wil want to change this to your pc number of threads
+#print("boosted test", np.mean(scores["test_score"]), "\n boosted train", np.mean(scores["train_score"]))
