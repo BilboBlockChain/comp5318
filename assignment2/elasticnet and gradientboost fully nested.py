@@ -80,10 +80,6 @@ X = X.drop(['month', 'day'], 1)
 # X_train = np.concatenate((np.array(X_train), X_train_cat), axis=1)
 # X_test = np.concatenate((np.array(X_test), X_test_cat), axis=1)
 
-# create random train test split
- X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.20)
-
-
 # define negative log likelihood of sample
 def negative_log_likelihood(y, p):
     result = -0.5 * np.log(2 * np.pi * np.var(p)) + (((y - np.mean(p)) ** 2) / 2 * np.var(p))
@@ -113,30 +109,91 @@ pipeline = MyPipeline([ ('scaler', MinMaxScaler()),
                      ('estimator', MyTransformedTargetRegressor(regressor=SGDRegressor(), func=np.log1p, inverse_func=np.expm1))])
 
 # define tuning grid
-parameters = {"estimator__regressor__alpha": [1e-5,1e-4,1e-3,1e-2,1e-1],
-              "estimator__regressor__l1_ratio": [0.001,0.25,0.5,0.75,0.999]}
+parameters = {"estimator__estimator__regressor__alpha": [1e-5,1e-4,1e-3,1e-2,1e-1],
+              "estimator__estimator__regressor__l1_ratio": [0.001,0.25,0.5,0.75,0.999]}
 
-# define parameter selection
-kv = RepeatedKFold(n_splits=10, n_repeats=10)
+# define outer and inner folds
+outer_kv = KFold(n_splits=10, shuffle=True, random_state=None)
+inner_kv = KFold(n_splits=10, shuffle=True, random_state=42)
+rfcv = RFECVCoef(estimator=pipeline, step=1, cv=inner_kv, scoring="neg_mean_squared_error")
 
-#rfcv = RFECV(estimator=pipeline, step=1, cv=kv, scoring="neg_mean_squared_error", verbose=True)
-#rfcv.fit_transform(X_train,y_train)
-
-#print(rfcv.support_)
-
-#X_train_new = rfcv.transform(X_train)
-# define grid search
-cv = GridSearchCV(estimator=pipeline, param_grid=parameters, cv=kv, iid=True,
+cv = GridSearchCV(estimator=rfcv, param_grid=parameters, cv=inner_kv, iid=True,
                   scoring= "neg_mean_squared_error", n_jobs=-1, verbose=True)
-cv.fit(X_train, y_train)
+
+mse_train = []
+mse_test = []
+nll = []
+for train, test in outer_kv.split(X):
+    # fit inner k fold loop
+    cv.fit(X.iloc[train,:], y[train] )
+
+    # get training/val and test scores
+    train_score = cv.best_score_
+    test_score = cv.score(X.iloc[test], y[test])
+
+    # get predictions and retrieve nll of test folds
+    y_preds = cv.predict(X.iloc[test])
+    nll.append(negative_log_likelihood(y[test], y_preds))
+
+    mse_train.append(train_score)
+    mse_test.append(test_score)
+
+np.mean(np.negative(np.array(mse_test)))
+np.sqrt(np.mean(np.negative(np.array(mse_test))))
+
 print("best hyperparameters for linear regression:",cv.best_params_)
-print("best score for linear regression:",cv.best_score_)
+cv.best_estimator_.coef_
+cv.best_estimator_.steps[1][1].
 
-y_preds = cv.predict(X_test)
+dir(cv)
+cv.cv_results_
 
-np.sqrt(np.negative(cv.score(X_test, y_test)))
 
 
+# build regression pipeline
+pipeline = Pipeline([ ('scaler', MinMaxScaler()),
+                     ('estimator', TransformedTargetRegressor(regressor=XGBRegressor(), func=np.log1p, inverse_func=np.expm1))]) #
+# define tuning grid
+parameters = {"estimator__regressor__learning_rate": [0.05, 0.10, 0.15, 0.20, 0.25, 0.30 ],
+              "estimator__regressor__max_depth": [3, 4, 5, 6, 8, 10, 12, 15],
+              "estimator__regressor__min_child_weight": [1, 3, 5, 7 ],
+              "estimator__regressor__gamma": [0.0, 0.1, 0.2 , 0.3, 0.4 ],
+              "estimator__regressor__colsample_bytree": [0.3, 0.4, 0.5 , 0.7 ]}
+
+
+
+# define outer and inner folds
+outer_kv = KFold(n_splits=5, shuffle=True, random_state=None)
+inner_kv = KFold(n_splits=5, shuffle=True, random_state=None)
+
+# instantiate inner cv
+#rfcv = RFECV(estimator=pipeline, step=1, cv=inner_kv, scoring="neg_mean_squared_error")
+
+cv = GridSearchCV(estimator=pipeline, param_grid=parameters, cv=inner_kv, iid=True,
+                  scoring= "neg_mean_squared_error", n_jobs=-1, verbose=True)
+
+mse_train = []
+mse_test = []
+nll = []
+for train, test in outer_kv.split(X):
+    # fit inner k fold loop
+    cv.fit(X.iloc[train,:], y[train] )
+
+    # get training/val and test scores
+    train_score = cv.best_score_
+    test_score = cv.score(X.iloc[test], y[test])
+
+    # get predictions and retrieve nll of test folds
+    y_preds = cv.predict(X.iloc[test])
+    nll.append(negative_log_likelihood(y[test], y_preds))
+
+    mse_train.append(train_score)
+    mse_test.append(test_score)
+
+np.mean(np.negative(np.array(mse_test)))
+np.sqrt(np.mean(np.negative(np.array(mse_test))))
+
+print("best hyperparameters for linear regression:",cv.best_params_)
 
 
 
