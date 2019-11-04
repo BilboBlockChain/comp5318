@@ -49,8 +49,14 @@ X['mnth_sin'] = np.sin(X.month*(2.*np.pi/12))
 X['mnth_cos'] = np.cos(X.month*(2.*np.pi/12))
 
 
+
 # drop original cat ONLY USE FOR cos sin transform
 X = X.drop(['month', 'day'], 1)
+
+# fix int warning
+X['X'] = X['X'].astype(float)
+X['Y'] = X['Y'].astype(float)
+X['RH'] = X['RH'].astype(float)
 
 # attempt using only sensor data
 #X = X[['temp', 'RH', 'wind', 'rain']]
@@ -83,6 +89,19 @@ def negative_log_likelihood(y, p):
     result = -0.5 * np.log(2 * np.pi * np.var(p)) + (((y - np.mean(p)) ** 2) / 2 * np.var(p))
     return result
 
+
+#feature selection list
+STFWIM = ['X', 'Y', 'FFMC', 'DMC', 'DC', 'ISI', 'temp', 'RH', 'wind', 'rain',
+       'day_sin', 'day_cos', 'mnth_sin', 'mnth_cos']
+
+STFWI = ['X', 'Y', 'FFMC', 'DMC', 'DC', 'ISI', 'day_sin', 'day_cos', 'mnth_sin', 'mnth_cos']
+
+STM = ['X', 'Y', 'temp', 'RH', 'wind', 'rain', 'day_sin', 'day_cos', 'mnth_sin', 'mnth_cos']
+
+FWI = ['FFMC', 'DMC', 'DC', 'ISI']
+
+M = ['temp', 'RH', 'wind', 'rain']
+
 # build pipeline
 pipeline = Pipeline([ ('scaler', MinMaxScaler()),
                      ('estimator', TransformedTargetRegressor(regressor=SGDRegressor(max_iter=5, tol=-np.infty), func=np.log1p, inverse_func=np.expm1))])
@@ -98,25 +117,10 @@ inner_kv = KFold(n_splits=10, shuffle=True, random_state=42)
 cv = GridSearchCV(estimator=pipeline, param_grid=parameters, cv=inner_kv, iid=True,
                   scoring= "neg_mean_squared_error", n_jobs=-1, verbose=True)
 
-X['X'] = X['X'].astype(float)
-X['Y'] = X['Y'].astype(float)
-X['RH'] = X['RH'].astype(float)
-
-STFWIM = ['X', 'Y', 'FFMC', 'DMC', 'DC', 'ISI', 'temp', 'RH', 'wind', 'rain',
-       'day_sin', 'day_cos', 'mnth_sin', 'mnth_cos']
-
-STFWI = ['X', 'Y', 'FFMC', 'DMC', 'DC', 'ISI', 'day_sin', 'day_cos', 'mnth_sin', 'mnth_cos']
-
-STM = ['X', 'Y', 'temp', 'RH', 'wind', 'rain', 'day_sin', 'day_cos', 'mnth_sin', 'mnth_cos']
-
-FWI = ['FFMC', 'DMC', 'DC', 'ISI']
-
-M = ['temp', 'RH', 'wind', 'rain']
-
 feature_space = [STFWI, STM, FWI, M]
 inner_result = []
 outer_result = []
-
+saving_inner_results = []
 i = 0
 for train, test in outer_kv.split(X):
     print("run", i)
@@ -129,6 +133,7 @@ for train, test in outer_kv.split(X):
         print(cv.best_score_)
     #persits and reset inner result for next fold
     inner_df = pd.DataFrame(inner_result)
+    #saving_inner_result.append
     inner_result = []
     # receive best model of run to fit on test set
     best_params_arg = inner_df.loc[:, 3].argmax()
@@ -153,55 +158,86 @@ for train, test in outer_kv.split(X):
 testing = pd.DataFrame(outer_result)
 testing.columns = ['fold_number','train_nmse','test_nmse','test_mae','best_feature_set','best_hyperparams','test_set','nll']
 
-print("RMSE:", np.sqrt(np.mean(np.negative(testing['test_nmse']))))
-print("MSE:",np.mean(np.negative(testing['test_nmse'])))
-print("MAE:", np.mean(testing['test_mae']))
 
 
 
-#XGBooost
-# build regression pipeline
-#pipeline = Pipeline([ ('scaler', MinMaxScaler()),
-                     ('estimator', TransformedTargetRegressor(regressor=XGBRegressor(), func=np.log1p, inverse_func=np.expm1))]) #
-# define tuning grid
-#parameters = {"estimator__regressor__learning_rate": [0.05, 0.10, 0.15, 0.20, 0.25, 0.30 ],
-#              "estimator__regressor__max_depth": [3, 4, 5, 6, 8, 10, 12, 15],
-#              "estimator__regressor__min_child_weight": [1, 3, 5, 7 ],
-#              "estimator__regressor__gamma": [0.0, 0.1, 0.2 , 0.3, 0.4 ],
-#              "estimator__regressor__colsample_bytree": [0.3, 0.4, 0.5 , 0.7 ]}
+def nested_cross_validator(regressor_input,
+                           parameters_dict,
+                           feature_space_list = [STFWIM, STFWI, STM, FWI, M],
+                           outer_splits = 10,
+                           inner_splits = 10):
+#regressor_input is a sklearn model
+#parameters_dict is a dictionary of hyperparameters - has to take form: estimator__regressor__PARAMETER
+#feature space is a list of feature lists to use - defaults to original paper feature grid plus full set
+#outer split is folds count for outer train test model - defaults to 10
+#inner_split is folds count for inner train validate folds - defaults to 10
+
+    # build pipeline
+    pipeline = Pipeline([ ('scaler', MinMaxScaler()),
+                         ('estimator', TransformedTargetRegressor(regressor=regressor_input, func=np.log1p, inverse_func=np.expm1))])
+
+    # define tuning grid
+    parameters = parameters_dict
+
+    # define outer and inner folds
+    outer_kv = KFold(n_splits=outer_splits, shuffle=True, random_state=42)
+    inner_kv = KFold(n_splits=inner_splits, shuffle=True, random_state=42)
+
+    cv = GridSearchCV(estimator=pipeline, param_grid=parameters, cv=inner_kv, iid=True,
+                      scoring= "neg_mean_squared_error", n_jobs=-1, verbose=True)
+
+    feature_space = feature_space_list
+    inner_result = []
+    outer_result = []
+    #saving_inner_results = []
+    i = 0
+    for train, test in outer_kv.split(X):
+        print("run", i)
+        #loop over feature space using only training data and cross validator hyper param tuner
+        for f in feature_space:
+            cv.fit(X.loc[X.index[train],f], y[train] )
+            #persist models to fit best on training set
+            inner_result.append([cv,cv.best_params_,f,cv.best_score_])
+            print(f)
+            print(cv.best_score_)
+        #persits and reset inner result for next fold
+        inner_df = pd.DataFrame(inner_result)
+        #saving_inner_result.append
+        #inner_result = []
+        # receive best model of run to fit on test set
+        best_params_arg = inner_df.loc[:, 3].argmax()
+        best_params = inner_df.iloc[best_params_arg,:]
+        # fit best cv model hyper parameters on best feature set for that fold
+        bcv = best_params[0]
+        bfs = best_params[2]
+        bcv.fit(X.loc[X.index[train],bfs], y[train])
+
+        # get training/val and test scores
+        train_score = best_params[3]
+        test_score = bcv.score(X.loc[X.index[test],bfs], y[test])
+
+        # get predictions and retrieve nll of test folds
+        y_preds = cv.predict(X.loc[X.index[test],bfs])
+        mae = mean_absolute_error(y[test], y_preds)
+        nllval = negative_log_likelihood(y[test], y_preds)
+
+        outer_result.append([i,train_score,test_score, mae, bfs,  best_params[1], y[test], nllval])
+        i += 1
+     results = pd.DataFrame(outer_result)
+    results.columns = ['fold_number','train_nmse','test_nmse','test_mae','best_feature_set','best_hyperparams','test_set','nll']
+    return results
 
 
+SGD_grid = {"estimator__regressor__alpha": [1e-5, 1e-4, 1e-3, 1e-2, 1e-1],
+            "estimator__regressor__l1_ratio": [0.001, 0.25, 0.5, 0.75, 0.999]}
 
-# define outer and inner folds
-#outer_kv = KFold(n_splits=5, shuffle=True, random_state=None)
-#inner_kv = KFold(n_splits=5, shuffle=True, random_state=None)
 
-# instantiate inner cv
-#rfcv = RFECV(estimator=pipeline, step=1, cv=inner_kv, scoring="neg_mean_squared_error")
+lr_results = nested_cross_validator(regressor_input=SGDRegressor(max_iter=5, tol=-np.infty),
+                       parameters_dict=SGD_grid)
 
-#cv = GridSearchCV(estimator=pipeline, param_grid=parameters, cv=inner_kv, iid=True,
-                  scoring= "neg_mean_squared_error", n_jobs=-1, verbose=True)
+print("RMSE:", np.sqrt(np.mean(np.negative(lr_results['test_nmse']))))
+print("MSE:",np.mean(np.negative(lr_results['test_nmse'])))
+print("MAE:", np.mean(lr_results['test_mae']))
 
-#mse_train = []
-#mse_test = []
-#nll = []
-#for train, test in outer_kv.split(X):
-    # fit inner k fold loop
-#    cv.fit(X.iloc[train,:], y[train] )
 
-    # get training/val and test scores
-#    train_score = cv.best_score_
-#    test_score = cv.score(X.iloc[test], y[test])
-
-    # get predictions and retrieve nll of test folds
-#    y_preds = cv.predict(X.iloc[test])
-#    nll.append(negative_log_likelihood(y[test], y_preds))
-
-#    mse_train.append(train_score)
-#    mse_test.append(test_score)
-
-#np.mean(np.negative(np.array(mse_test)))
-#np.sqrt(np.mean(np.negative(np.array(mse_test))))
-
-#print("best hyperparameters for linear regression:",cv.best_params_)
 
