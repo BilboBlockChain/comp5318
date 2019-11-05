@@ -112,7 +112,9 @@ pipeline = Pipeline([ ('scaler', MinMaxScaler()),
 
 # define tuning grid
 parameters = {"estimator__regressor__alpha": [1e-5,1e-4,1e-3,1e-2,1e-1],
-              "estimator__regressor__l1_ratio": [0.001,0.25,0.5,0.75,0.999]}
+              "estimator__regressor__l1_ratio": [0.001,0.25,0.5,0.75,0.999],
+              "estimator__regressor__penalty": ['none', 'l2', 'l1','elasticnet']
+              }
 
 # define outer and inner folds
 outer_kv = KFold(n_splits=10, shuffle=True, random_state=42)
