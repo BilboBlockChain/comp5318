@@ -23,6 +23,10 @@ from sklearn.model_selection import cross_validate
 from sklearn.base import BaseEstimator
 from sklearn.feature_selection import RFECV
 from sklearn.ensemble import RandomForestRegressor
+from datetime import datetime
+#start runtime clock
+start=datetime.now()
+
 
 pd.options.mode.chained_assignment = None
 
@@ -158,4 +162,11 @@ for train, test in outer_kv.split(X):
 testing = pd.DataFrame(outer_result)
 testing.columns = ['fold_number','train_nmse','test_nmse','test_mae','best_feature_set','best_hyperparams','test_set','nll']
 
+print("RMSE:", np.sqrt(np.mean(np.negative(testing['test_nmse']))))
+print("MSE:",np.mean(np.negative(testing['test_nmse'])))
+print("MAE:", np.mean(testing['test_mae']))
 
+
+print(datetime.now()-start)
+
+testing.to_csv("assignment2/lr_results_set.csv")
