@@ -26,9 +26,9 @@ from sklearn.ensemble import RandomForestRegressor
 from datetime import datetime
 #start runtime clock
 start=datetime.now()
+#set reproducible seed
+np.random.seed()
 
-
-pd.options.mode.chained_assignment = None
 
 raw = pd.read_csv('assignment2/forestfires.csv')
 
@@ -90,7 +90,7 @@ X['RH'] = X['RH'].astype(float)
 
 # define negative log likelihood of sample
 def negative_log_likelihood(y, p):
-    result = -0.5 * np.log(2 * np.pi * np.var(p)) + (((y - np.mean(p)) ** 2) / 2 * np.var(p))
+    result = 0.5 * np.log(2 * np.pi * np.var(p)) + (((y - np.mean(p)) ** 2) / (2 * np.var(p)))
     return result
 
 
@@ -108,12 +108,13 @@ M = ['temp', 'RH', 'wind', 'rain']
 
 # build pipeline
 pipeline = Pipeline([ ('scaler', MinMaxScaler()),
-                     ('estimator', TransformedTargetRegressor(regressor=SGDRegressor(max_iter=5, tol=-np.infty), func=np.log1p, inverse_func=np.expm1))])
+                     ('estimator', TransformedTargetRegressor(regressor=SGDRegressor(max_iter=5, tol=-np.infty, random_state=42)
+                                                              , func=np.log1p, inverse_func=np.expm1))])
 
 # define tuning grid
 parameters = {"estimator__regressor__alpha": [1e-5,1e-4,1e-3,1e-2,1e-1],
               "estimator__regressor__l1_ratio": [0.001,0.25,0.5,0.75,0.999],
-              "estimator__regressor__penalty": ['none', 'l2', 'l1','elasticnet']
+              "estimator__regressor__penalty": [ None, 'l2', 'l1','elasticnet']
               }
 
 # define outer and inner folds
@@ -123,7 +124,7 @@ inner_kv = KFold(n_splits=10, shuffle=True, random_state=42)
 cv = GridSearchCV(estimator=pipeline, param_grid=parameters, cv=inner_kv, iid=True,
                   scoring= "neg_mean_squared_error", n_jobs=-1, verbose=True)
 
-feature_space = [STFWI, STM, FWI, M]
+feature_space = [STFWIM, STFWI, STM, FWI, M]
 inner_result = []
 outer_result = []
 saving_inner_results = []
@@ -139,7 +140,7 @@ for train, test in outer_kv.split(X):
         print(cv.best_score_)
     #persits and reset inner result for next fold
     inner_df = pd.DataFrame(inner_result)
-    #saving_inner_result.append
+    #reset inner result
     inner_result = []
     # receive best model of run to fit on test set
     best_params_arg = inner_df.loc[:, 3].argmax()
@@ -172,3 +173,12 @@ print("MAE:", np.mean(testing['test_mae']))
 print(datetime.now()-start)
 
 testing.to_csv("assignment2/lr_results_set.csv")
+
+inner_testing = pd.DataFrame(inner_result)
+inner_testing.iloc[2,0].cv_results_
+
+
+bcv.best_estimator_.named_steps['estimator'].regressor.coef_
+
+inner_testing_rf = pd.DataFrame(inner_result_rf)
+inner_testing.iloc[2,0].cv_results_
