@@ -1,0 +1,9 @@
+param_svm__regressor__C,param_svm__regressor__kernel,params,mean_test_score,std_test_score,rank_test_score
+1,linear,"{'svm__regressor__C': 1, 'svm__regressor__kernel': 'linear'}",-4550.318755,8124.175276,4
+1,rbf,"{'svm__regressor__C': 1, 'svm__regressor__kernel': 'rbf'}",-4551.192505,8124.237506,5
+10,linear,"{'svm__regressor__C': 10, 'svm__regressor__kernel': 'linear'}",-4550.111629,8123.630878,2
+10,rbf,"{'svm__regressor__C': 10, 'svm__regressor__kernel': 'rbf'}",-4572.6707,8114.361158,6
+100,linear,"{'svm__regressor__C': 100, 'svm__regressor__kernel': 'linear'}",-4550.118551,8123.624159,3
+100,rbf,"{'svm__regressor__C': 100, 'svm__regressor__kernel': 'rbf'}",-248075.7473,734737.5591,7
+1000,linear,"{'svm__regressor__C': 1000, 'svm__regressor__kernel': 'linear'}",-4550.101725,8123.606097,1
+1000,rbf,"{'svm__regressor__C': 1000, 'svm__regressor__kernel': 'rbf'}",-2619722478,7915898167,8

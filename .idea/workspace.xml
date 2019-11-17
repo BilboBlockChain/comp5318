@@ -3,8 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="94869dbc-5ed9-4ffd-89be-02d6d336ea42" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assignment2/elasticnet and gradientboost manual features.py" beforeDir="false" afterPath="$PROJECT_DIR$/assignment2/elasticnet and gradientboost manual features.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assignment2/lr_results_set.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assignment2/elasticnet and gradientboost manual features.py" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -109,6 +108,10 @@
       <workItem from="1572856659369" duration="5236000" />
       <workItem from="1572871884669" duration="531000" />
       <workItem from="1572934876331" duration="22222000" />
+      <workItem from="1573025771798" duration="4715000" />
+      <workItem from="1573081591003" duration="18887000" />
+      <workItem from="1573167355972" duration="1865000" />
+      <workItem from="1573195473520" duration="1605000" />
     </task>
     <servers />
   </component>
