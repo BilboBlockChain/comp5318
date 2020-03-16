@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="94869dbc-5ed9-4ffd-89be-02d6d336ea42" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assignment2/elasticnet and gradientboost manual features.py" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -41,8 +40,8 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Bitbucket/dstarcluster_model_deployment/dstarcluster_model_deployment" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="last_opened_file_path" value="$USER_HOME$/AppData/Local/GitHubDesktop/app-2.2.3/resources/app/git/cmd/git.exe" />
+    <property name="settings.editor.selected.configurable" value="vcs.Git" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -112,6 +111,8 @@
       <workItem from="1573081591003" duration="18887000" />
       <workItem from="1573167355972" duration="1865000" />
       <workItem from="1573195473520" duration="1605000" />
+      <workItem from="1574593904465" duration="1630000" />
+      <workItem from="1584009374380" duration="1566000" />
     </task>
     <servers />
   </component>
